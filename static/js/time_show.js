@@ -37,3 +37,16 @@ function showProjectTime() {
     setHtmlElementById("project-time-minute", result.minutes);
     setHtmlElementById("project-time-second", result.seconds);
 }
+
+function showTimestampInLocalTime(timestamp) {
+    // by Google Bard
+    const utcTimestamp = timestamp;
+
+    const localDate = new Date(utcTimestamp * 1000);
+    const formattedLocalDate = localDate.getFullYear() + '-' + (localDate.getMonth() + 1).toString().padStart(2, '0') + '-' + localDate.getDate().toString().padStart(2, '0');
+    const formattedLocalTime = localDate.getHours().toString().padStart(2, '0') + ':' + localDate.getMinutes().toString().padStart(2, '0') + ':' + localDate.getSeconds().toString().padStart(2, '0');
+
+    const formattedLocalDatetime = formattedLocalDate + ' ' + formattedLocalTime;
+
+    return formattedLocalDatetime;
+}
