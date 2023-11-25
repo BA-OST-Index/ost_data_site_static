@@ -65,12 +65,12 @@ img {
     border-color: black;
 }
 
-.infobox-title, .infobox-subtitle {
+.infobox-title, .infobox-subtitle, .stats-title > td {
     font-weight: bold;
     text-align: center;
 }
 
-.infobox-subtitle {
+.infobox-subtitle, .stats-title {
     background-color: rgba(51, 153, 204, 0.4);
 }
 
@@ -381,3 +381,28 @@ body > .wrapper {
 .video-stats-badge {
     display: inline-block;
 }
+
+/* Stats Table */
+.stats-table, .stats-table tr, .stats-table tr td {
+    border: black 1px solid;
+}
+
+.stats-table {
+    text-align: left;
+    color: black;
+    margin-top: 8px;
+}
+
+.video-stats-table {
+    width: min(50em, 80%);
+}
+
+@media print, screen and (max-width: 960px) {
+    .video-stats-table {
+        width: 100%;
+    }
+}
+
+/* Table with fixed width */
+.td-16-67-width {width: 16.67%}
+.td-25-00-width {width: 25%}
