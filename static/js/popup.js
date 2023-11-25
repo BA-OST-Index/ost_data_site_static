@@ -17,6 +17,6 @@ function showPopupByTooltipId(tooltip_id) {
         },
     });
     document.getElementsByTagName("html")[0].style = "";
-    display_zhcn_element();
     current_popup.show();
+    display_zhcn_element();
 }

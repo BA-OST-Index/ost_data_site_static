@@ -9,8 +9,8 @@
     font-size: initial;
 }
 
-.popup-content .popup-body .tooltip-div a {color: #39c !important;}
-.popup-content .popup-body .tooltip-div a:hover {color: #069 !important;}
+.popup-content a {color: #39c !important;}
+.popup-content a:hover {color: #069 !important;}
 
 .popup-content .popup-body .tooltip-div .tooltip-ol li {
     text-overflow: initial;
