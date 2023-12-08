@@ -17,63 +17,63 @@ function getBilibiliIDfromURL(url) {
     return a_element.pathname.split("/")[2];
 }
 
-var resize_all_players = function() {
+var resizeAllEmbeddedPlayers = function() {
     var width = document.body.clientWidth;
-    var resize_player = function (player, width, height) {
+    var resizeSinglePlayer = function (player, width, height) {
         player.style.width = width + "px";
         player.style.height = height + "px";
     }
-    var all_players = document.getElementsByClassName("track-video-player");
-    var actual_width, actual_height;
+    var allEmbeddedPlayers = document.getElementsByClassName("track-video-player");
+    var actualWidth, actualHeight;
 
     /* stupid infobox copied from Wikipedia */
     if (width > 992) {
-        actual_width = width * 0.4;
-        actual_height = actual_width / 16 * 9;
+        actualWidth = width * 0.4;
+        actualHeight = actualWidth / 16 * 9;
     }
     else {
         /* the site itself, adaptive web */
         if (width > 960) {
-            actual_width = width * 0.6;
-            actual_height = actual_width / 16 * 9;
+            actualWidth = width * 0.6;
+            actualHeight = actualWidth / 16 * 9;
         }
         else {
             /* the site itself, adaptive web */
             if (width > 480) {
-                actual_width = width - 50 * 2;
-                actual_height = actual_width / 16 * 9;
+                actualWidth = width - 50 * 2;
+                actualHeight = actualWidth / 16 * 9;
             }
             /* the site itself, adaptive web */
             else {
-                actual_width = width - 15 * 2;
-                actual_height = actual_width / 16 * 9;
+                actualWidth = width - 15 * 2;
+                actualHeight = actualWidth / 16 * 9;
             }
         }
     }
 
-    for (let i = 0; i < all_players.length; i++) {
-        resize_player(all_players[i], actual_width, actual_height);
+    for (let i = 0; i < allEmbeddedPlayers.length; i++) {
+        resizeSinglePlayer(allEmbeddedPlayers[i], actualWidth, actualHeight);
     }
 }
 
-function play_video(video_url, element_id) {
+function playEmbeddedVideo(video_url, element_id) {
     document.getElementById(element_id).style.display = "none";
     var container = document.getElementById(element_id + "-container");
-    var video_id;
+    var videoID;
     if (video_url.includes("youtu")) {
-        video_id = getYoutubeIDfromURL(video_url);
-        container.innerHTML = "<iframe src=\"https://www.youtube-nocookie.com/embed/" + video_id + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen class=\"track-video-player\"></iframe>";
+        videoID = getYoutubeIDfromURL(video_url);
+        container.innerHTML = "<iframe src=\"https://www.youtube-nocookie.com/embed/" + videoID + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen class=\"track-video-player\"></iframe>";
     }
     else {
         if (video_url.includes("bilibili")) {
-            video_id = getBilibiliIDfromURL(video_url);
-            let video_page_id = getParameterByName("p", video_url);
-            if (video_page_id === null) {video_page_id = "1";}
-            container.innerHTML = "<iframe src=\"https://player.bilibili.com/player.html?bvid=" + video_id + "&p=" + video_page_id + "\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\" class=\"track-video-player\"> </iframe>";
+            videoID = getBilibiliIDfromURL(video_url);
+            let videoPageID = getParameterByName("p", video_url);
+            if (videoPageID === null) {videoPageID = "1";}
+            container.innerHTML = "<iframe src=\"https://player.bilibili.com/player.html?bvid=" + videoID + "&p=" + videoPageID + "\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\" class=\"track-video-player\"> </iframe>";
         }
     }
-    resize_all_players();
+    resizeAllEmbeddedPlayers();
 }
 
-window.onresize = resize_all_players;
-addEventListener('load', function() {resize_all_players();})
+addEventListener('load', function() {resizeAllEmbeddedPlayers();})
+addEventListener('resize', function () {resizeAllEmbeddedPlayers();})

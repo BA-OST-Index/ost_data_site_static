@@ -9,7 +9,7 @@
     font-size: initial;
 }
 
-.popup-content a {color: #39c !important;}
+.popup-content a {color: #39c !important; font-weight: initial !important;}
 .popup-content a:hover {color: #069 !important;}
 
 .popup-content .popup-body .tooltip-div .tooltip-ol li {

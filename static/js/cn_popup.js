@@ -39,30 +39,30 @@ async function checkCnIP() {
     }
 
     // 检查IP
-    let get_ip = async function () {
+    let getIP = async function () {
       return new Promise((resolve, reject) => {
         $.getJSON("https://api.myip.la/en?json", function (data) {
-          const curr_ip = data["location"]["country_code"];
-          resolve(curr_ip);
+          const currIP = data["location"]["country_code"];
+          resolve(currIP);
         }).fail((error) => {
           reject(error);
         });
       });
     }
-    let curr_ip;
-    curr_ip = await get_ip();
-    if (curr_ip !== "CN") {
+    let currIP;
+    currIP = await getIP();
+    if (currIP !== "CN") {
         return;
     }
 
     // 检查localStorage
-    let last_show_time = localStorage.getItem("cn_site_last_show");
-    if (last_show_time === null) {
+    let lastShowTime = localStorage.getItem("cn_site_last_show");
+    if (lastShowTime === null) {
         // 第一次访问？那就直接显示吧（
         showCnPopup();
     } else {
         // 否则检查时间，目前是三天
-        if (Date.now() - Number(last_show_time) >= 2.592e+8) {
+        if (Date.now() - Number(lastShowTime) >= 2.592e+8) {
             showCnPopup();
         }
     }
