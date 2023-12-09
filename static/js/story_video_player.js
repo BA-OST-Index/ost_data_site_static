@@ -96,6 +96,10 @@ function changeStoryVideoContainerEmbeddedURL(element, url) {
             result_url = getEmbeddedVideoUrl.youtube(result.videoId, result.videoTimestamp);
             htmlCode = embeddedVideoPlayerIframeConstructor.youtube(result.videoId, result.videoTimestamp);
         }
+        // others, like blue-archive.io
+        else {
+            window.open(url, "_blank");
+        }
     }
 
     // check url, if it's the same then don't switch
@@ -121,7 +125,6 @@ function calculateTooltipVideoContainerSize() {
         height: actualHeight
     }
 }
-
 
 function playEmbeddedStoryPartVideo(elementId, url) {
     const element = document.getElementById(elementId);
