@@ -1,30 +1,6 @@
-// https://bobbyhadz.com/blog/get-youtube-id-from-url-using-javascript
-function getYoutubeIDfromURL(url) {
-  const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  if (match && match[2].length === 11) {
-    return match[2];
-  }
-  console.log('The supplied URL is not a valid youtube URL');
-  return '';
-}
-
-// ref: https://stackoverflow.com/questions/39334400/how-to-split-url-to-get-url-path-in-javascript
-// also getYouTubeIDfromURL (defined above)
-function getBilibiliIDfromURL(url) {
-    const a_element = document.createElement("a");
-    a_element.href = url;
-    return a_element.pathname.split("/")[2];
-}
-
-var resizeAllEmbeddedPlayers = function() {
-    var width = document.body.clientWidth;
-    var resizeSinglePlayer = function (player, width, height) {
-        player.style.width = width + "px";
-        player.style.height = height + "px";
-    }
-    var allEmbeddedPlayers = document.getElementsByClassName("track-video-player");
-    var actualWidth, actualHeight;
+function calulateEmbeddedVideoPlayerSize() {
+    const width = document.body.clientWidth;
+    let actualWidth, actualHeight;
 
     /* stupid infobox copied from Wikipedia */
     if (width > 992) {
@@ -51,27 +27,50 @@ var resizeAllEmbeddedPlayers = function() {
         }
     }
 
-    for (let i = 0; i < allEmbeddedPlayers.length; i++) {
-        resizeSinglePlayer(allEmbeddedPlayers[i], actualWidth, actualHeight);
+    return {
+        width: actualWidth,
+        height: actualHeight
     }
 }
 
-function playEmbeddedVideo(video_url, element_id) {
-    document.getElementById(element_id).style.display = "none";
-    var container = document.getElementById(element_id + "-container");
-    var videoID;
-    if (video_url.includes("youtu")) {
-        videoID = getYoutubeIDfromURL(video_url);
-        container.innerHTML = "<iframe src=\"https://www.youtube-nocookie.com/embed/" + videoID + "\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen class=\"track-video-player\"></iframe>";
+function resizeSinglePlayer(player, width, height) {
+    player.style.width = width + "px";
+    player.style.height = height + "px";
+}
+
+function resizeAllEmbeddedPlayers() {
+    var allEmbeddedPlayers = document.getElementsByClassName("track-video-player");
+    var actualSize = calulateEmbeddedVideoPlayerSize();
+
+    for (let i = 0; i < allEmbeddedPlayers.length; i++) {
+        resizeSinglePlayer(allEmbeddedPlayers[i], actualSize.width, actualSize.height);
+    }
+}
+
+function playEmbeddedVideo(videoUrl, elementId) {
+    // hide the description first
+    // document.getElementById(element_id).style.display = "none";
+    // but maybe it's unnecessary. 2023/12/09
+
+    const container = document.getElementById(elementId + "-container");
+    let videoID;
+
+    // 如果已经有视频在播放了，那就不另外加载
+    if (container.innerHTML !== "") {return;}
+
+    if (videoUrl.includes("youtu")) {
+        videoID = videoUrlExtractor.youtube(videoUrl).videoId;
+        container.innerHTML = embeddedVideoPlayerIframeConstructor.youtube(videoID, 0);
     }
     else {
-        if (video_url.includes("bilibili")) {
-            videoID = getBilibiliIDfromURL(video_url);
-            let videoPageID = getParameterByName("p", video_url);
-            if (videoPageID === null) {videoPageID = "1";}
-            container.innerHTML = "<iframe src=\"https://player.bilibili.com/player.html?bvid=" + videoID + "&p=" + videoPageID + "\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\" class=\"track-video-player\"> </iframe>";
+        if (videoUrl.includes("bilibili")) {
+            const result = videoUrlExtractor.bilibili(videoUrl);
+            videoID = result.videoId;
+            const videoPageID = result.videoPartId;
+            container.innerHTML = embeddedVideoPlayerIframeConstructor.bilibili(videoID, videoPageID, 0)
         }
     }
+
     resizeAllEmbeddedPlayers();
 }
 

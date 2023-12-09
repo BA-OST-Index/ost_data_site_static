@@ -6,6 +6,12 @@ function setScrollToSmooth() {document.getElementsByTagName("html")[0].style = "
 function removePopup(popup) {
     popup.hide();
     currentPopup.popupEl.remove();
+    currentPopup = void 0;
+}
+
+async function autoCurrentDestruct() {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    removePopup(currentPopup);
 }
 
 function showPopupByTooltipId(tooltip_id) {
@@ -17,6 +23,7 @@ function showPopupByTooltipId(tooltip_id) {
         "content": tooltip_data[tooltip_id],
         hideCallback: () => {
             setScrollToSmooth();
+            autoCurrentDestruct();
         },
     });
     setScrollToNone();
