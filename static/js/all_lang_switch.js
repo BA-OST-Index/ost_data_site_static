@@ -112,4 +112,5 @@ function displayZhcnString() {
             }
         }
     }
+    convertZhcn();
 }

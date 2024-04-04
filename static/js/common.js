@@ -27,7 +27,8 @@ async function _fetchJsonData(apiEndpoint) {
 }
 async function fetchAndProcessJson(url) {
     try {
-        var data = await _fetchJsonData(url);
+        var data = _fetchJsonData(url);
+        data = await data;
         // Process the parsed JSON data
         return data
     } catch (error) {

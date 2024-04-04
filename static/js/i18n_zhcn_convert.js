@@ -1,10 +1,23 @@
-let ZHCN_CONVERSION_DB = fetchAndProcessJson("https://ba-static.cnfast.top/public_data/main/i18n_zhcn_conversion/export/i18n_zhcn_all_min.json")
+var ZHCN_CONVERSION_DB = undefined;
+
+function initZhcnConversionDB() {
+    const result = fetchAndProcessJson("https://ba-static.cnfast.top/public_data/main/i18n_zhcn_conversion/export/i18n_zhcn_all_min.json");
+    result.then(
+        function (result) {
+            ZHCN_CONVERSION_DB = result;
+            console.log(result);
+
+            convertZhcn();
+        }
+    );
+}
 
 function convertZhcn() {
-    let allZhcnElements = document.getElementsByClassName("i");
+    let allZhcnElements = document.getElementsByClassName("i18n-zhcn-text");
 
     if (ZHCN_CONVERSION_DB === undefined) {
-        ZHCN_CONVERSION_DB = fetchAndProcessJson("https://ba-static.cnfast.top/public_data/main/i18n_zhcn_conversion/export/i18n_zhcn_all_min.json");
+        initZhcnConversionDB();
+        return;
     }
 
     for (let i = 0; i < allZhcnElements.length; i++) {
@@ -29,22 +42,33 @@ function convertZhcn() {
             case "zh_cn_tw":
                 _mode = 2;
                 break;
+            case "all":
+                _mode = 3;
+                break;
             default:
                 _mode = 0;
         }
 
         let temp = currElement.dataset.text;
+        temp = temp.replaceAll("&amp;", "&");
+
         for (const [key, values] of Object.entries(ZHCN_CONVERSION_DB)) {
             for (const entry of values) {
-                for (const i in entry) {
+                for (const i of entry) {
                     const searchStr = "{" + key + i + "}";
-                    const replaceStr = "{" + key + entry[_mode] + "}";
-                    temp = temp.replace(searchStr, replaceStr);
+
+                    let replaceStr;
+                    if (_mode === 3) {
+                        replaceStr = entry[0] + " (zh_cn_jp) / " + entry[1] + " (zh_cn_cn) / " + entry[2] + " (zh_cn_jp) "
+                    }
+                    else {
+                        replaceStr = entry[_mode];
+                    }
+
+                    temp = temp.replaceAll(searchStr, replaceStr);
                 }
             }
         }
         currElement.innerHTML = temp;
     }
 }
-
-addEventListener("DOMContentLoaded", function() {convertZhcn()});
