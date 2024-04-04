@@ -1,3 +1,36 @@
+// lang_switch.js
+function switchToLanguage() {
+    let selectElement = document.getElementById("lang_switcher");
+
+    let selectedLangcode = selectElement.value;
+    let urlLangcode = getCurrentLangcode(document.URL);
+
+    if (selectedLangcode !== urlLangcode) {
+        let urlAnchorObject = document.createElement("a");
+        urlAnchorObject.href = document.URL;
+        let pathnameList = urlAnchorObject.pathname.split("/");
+        pathnameList[1] = selectedLangcode;
+        urlAnchorObject.pathname = pathnameList.join("/");
+
+        // go to another lang page
+        window.location.href = urlAnchorObject.href;
+    }
+}
+
+function getCurrentLangcode(url) {
+    let urlAnchorObject = document.createElement("a");
+    urlAnchorObject.href = url;
+    return urlAnchorObject.pathname.split("/")[1];
+}
+
+function showLangSwitchStatus() {
+    let selectElement = document.getElementById("lang_switcher");
+
+    // set value
+    selectElement.value = getCurrentLangcode(document.URL);
+}
+
+// zhcn_switch.js
 function setZhcnStorage(option_element) {
     var selectedIndex = option_element.selectedIndex;
     if (selectedIndex === 0) {localStorage.setItem("zh_cn", "zh_cn_cn");}
@@ -10,6 +43,7 @@ function setZhcnStorage(option_element) {
     }
 
     displayZhcnString();
+    convertZhcn();
 }
 
 function displayZhcnString() {
