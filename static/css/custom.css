@@ -489,3 +489,18 @@ a > code {
 .story-segment-data {
     display: none;
 }
+
+
+/* 修改自SchaleDB */
+.icon-type-container {
+    border-radius: 999px;
+    padding: 0;
+    margin: 0;
+}
+
+.icon-type-story-battle {
+    background-color: #A70C19;
+    color: #FFF;
+    height: 1em;
+    padding: 0.15em;
+}
