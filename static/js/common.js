@@ -16,24 +16,18 @@ function getParameterByName(name, url = window.location.href) {
 }
 
 /* ChatGPT generated */
-async function _fetchJsonData(apiEndpoint) {
-    return new Promise(function (resolve, reject) {
-        $.getJSON(apiEndpoint, function (data) {
-            resolve(data); // Resolve the Promise with the parsed JSON data
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            reject("Error: " + textStatus + ", " + errorThrown); // Reject the Promise with an error message
-        });
-    });
-}
 async function fetchAndProcessJson(url) {
     try {
-        var data = _fetchJsonData(url);
-        data = await data;
-        // Process the parsed JSON data
-        return data
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data: ' + response.statusText);
+        }
+
+        return response.json();
     } catch (error) {
-        // Handle errors
         console.error(error);
+        throw error; // Re-throw the error to propagate it further if needed
     }
 }
 

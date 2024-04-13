@@ -1,13 +1,14 @@
 var ZHCN_CONVERSION_DB = undefined;
 
-function initZhcnConversionDB() {
-    const result = fetchAndProcessJson("https://ba-static.cnfast.top/public_data/main/i18n_zhcn_conversion/export/i18n_zhcn_all_min.json");
-    result.then(
-        function (result) {
-            ZHCN_CONVERSION_DB = result;
-            console.log(result);
+async function initZhcnConversionDB() {
+    while (true) {
+        try {
+            ZHCN_CONVERSION_DB = await fetchAndProcessJson("https://ba-static.cnfast.top/public_data/main/i18n_zhcn_conversion/export/i18n_zhcn_all_min.json");
+            break;
+        } catch (err) {
+            console.error(`Error initializing zhcn: ${err}`)
         }
-    );
+    }
 }
 
 function convertZhcn() {
