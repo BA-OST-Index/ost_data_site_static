@@ -502,6 +502,7 @@ a > code {
     background-color: #A70C19;
     color: #FFF;
     height: 1em;
+    width: auto !important; /* countermeasure for bg tooltip */
     padding: 0.15em;
 }
 
